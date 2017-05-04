@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+            <title>Project 2</title>
+  
+			<script id="vertex-shader" type="x-shader/x-vertex">
+			attribute vec4 myPosition;
+			attribute vec4 myColor;
+			varying vec4 varyingColor;
+			uniform float transX;
+			uniform float transY;
+			uniform float alpha;
+			uniform float beta;
+			
+			void main() {
+				mat4 M_x; mat4 M_y;
+				mat4 M_tx; mat4 M_ty;
+				
+				M_x = mat4(1, 0, 0, 0, 0, cos(alpha), -sin(alpha), 0,
+							0, sin(alpha), cos(alpha), 0, 0, 0, 0, 1);
+				
+				M_y = mat4(cos(beta), 0, -sin(beta), 0, 0, 1, 0, 0,
+							sin(beta), 0, cos(beta), 0, 0, 0, 0, 1);
+				M_tx = mat4
+                (1, 0, 0, 0,
+                 0, 1, 0, 0,
+                 0, 0, 1, 0,
+                 transX, 0, 0, 1);
+				 
+                M_ty = mat4
+                (1, 0, 0, 0,
+                 0, 1, 0, 0,
+                 0, 0, 1, 0,
+                 0, transY, 0, 1);	
+				 
+				gl_PointSize = 1.0;
+				gl_Position = M_tx * M_ty * M_x * M_y * myPosition;
+				varyingColor = myColor;
+			}	
+            </script>
+            
+            <script id="fragment-shader" type="x-shader/x-fragment">
+            precision mediump float;
+			varying vec4 varyingColor;
+			
+			void main() {
+				gl_FragColor = varyingColor;
+			}
+            </script>
+            
+            <script type="text/javascript" src="Common/webgl-utils.js"></script>
+            <script type="text/javascript" src="Common/initShaders.js"></script>
+            <script type="text/javascript" src="Common/MV.js"></script>
+        
+            <script type="text/javascript" src="Project2.js"></script>
+            
+    </head>
+    
+    <body onload = "init()">
+        <canvas id="gl-canvas" width="512" height="512"></canvas><br/>
+        <button id="rotateX" onclick="rotateAroundX()">Rotate Around x</button>
+        <button id="rotateY" onclick="rotateAroundY()">Rotate Around y</button>
+    </body>
+</html>
+
+
