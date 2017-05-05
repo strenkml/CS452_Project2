@@ -38,7 +38,7 @@ function init() {
 
 }
 
-function () {
+function drawTable() {
     var vertices = [vec4( -.5,  .01,  -.2), //TOP
                     vec4( -.5, -.01,  -.2), 
                     vec4(  .5, -.01,  -.2), 
