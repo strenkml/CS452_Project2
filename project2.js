@@ -4,9 +4,15 @@ var Mvector;
 var alpha, beta;
 var transY, transX;
 var transYLoc, transXLoc;
+var chairImage, deskImage, laptopImage;
 	
 function init() {
     var canvas=document.getElementById("gl-canvas");
+	
+	chairImage = document.getElementById("chairPicture");
+	deskImage = document.getElementById("deskPicture");
+	laptopImage = document.getElementById("laptopPicture");
+	
     gl=WebGLUtils.setupWebGL(canvas);
 	
 	alpha = 0; beta = 0;
@@ -32,7 +38,7 @@ function init() {
 
 }
 
-function drawTable() {
+function () {
     var vertices = [vec4( -.5,  .01,  -.2), //TOP
                     vec4( -.5, -.01,  -.2), 
                     vec4(  .5, -.01,  -.2), 
@@ -78,7 +84,7 @@ function drawTable() {
                     vec4( -.01-.49, -.1-.1,  .01+.19), 
                     vec4(  .01-.49, -.1-.1,  .01+.19)];
 
-    var vertexColors = [vec4( 1, 1, 1, 1),
+    /* var vertexColors = [vec4( 1, 1, 1, 1),
 						vec4( 1, 1, 1, 1),
 						vec4( 1, 1, 1, 1),
 						vec4( 1, 1, 1, 1),
@@ -121,8 +127,54 @@ function drawTable() {
 						vec4( 1, 1, 1, 1),
 						vec4( 1, 1, 1, 1),
 						vec4( 1, 1, 1, 1),
-						vec4( 1, 1, 1, 1)];
+						vec4( 1, 1, 1, 1)]; */
 
+	var textureCoordinates = [vec2(0.0, 0.0),//top
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  
+							  vec2(0.0, 0.0),//leg1
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  
+							  vec2(0.0, 0.0),//leg2
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  
+							  vec2(0.0, 0.0),//leg3
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  
+							  vec2(0.0, 0.0),//leg4
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0)];
+						
+						
     var indexList = [0, 1, 3,
                      1, 2, 3,
                      6, 5, 7,
@@ -200,13 +252,28 @@ function drawTable() {
 	gl.vertexAttribPointer(myPosition, 4, gl.FLOAT, false, 0, 0);
 	gl.enableVertexAttribArray(myPosition);
 	
-	var colorBuffer = gl.createBuffer();
+	/* var colorBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, flatten(vertexColors), gl.STATIC_DRAW);
 	
 	var myColor = gl.getAttribLocation(myShaderProgram, "myColor");
 	gl.vertexAttribPointer(myColor, 4, gl.FLOAT, false, 0, 0);
-	gl.enableVertexAttribArray(myColor);
+	gl.enableVertexAttribArray(myColor); */
+	
+	var textureBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, flatten(textureCoordinates), gl.STATIC_DRAW);
+
+	var texturePosition = gl.getAttribLocation(myShaderProgram, "textureCoordinate");
+	gl.vertexAttribPointer(texturePosition, 2, gl.FLOAT, false, 0, 0);
+	gl.enableVertexAttribArray(texturePosition);
+
+	textureImage = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, textureImage);
+	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, deskImage);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 	
 	gl.drawElements(gl.TRIANGLES, 180, gl.UNSIGNED_BYTE, 0);
 }
@@ -265,8 +332,62 @@ function drawChair() {
                     vec4( -.01-.09,  .1-.1,  .01-.41), 
                     vec4( -.01-.09, -.1-.1,  .01-.41), 
                     vec4(  .01-.09, -.1-.1,  .01-.41)];
+					
+	var textureCoordinates = [vec2(0.0, 0.0),//bottom
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  
+							  vec2(0.0, 0.0),//back
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  
+							  vec2(0.0, 0.0),//leg1
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  
+							  vec2(0.0, 0.0),//leg2
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  
+							  vec2(0.0, 0.0),//leg3
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  
+							  vec2(0.0, 0.0),//leg4
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0)];
 
-    var vertexColors = [vec4( 0, 0, 0, 1),
+    /*var vertexColors = [vec4( 0, 0, 0, 1),
 						vec4( 0, 0, 0, 1),
 						vec4( 0, 0, 0, 1),
 						vec4( 0, 0, 0, 1),
@@ -318,7 +439,7 @@ function drawChair() {
 						vec4( 0, 0, 0, 1),
 						vec4( 0, 0, 0, 1),
 						vec4( 0, 0, 0, 1),
-						vec4( 0, 0, 0, 1)];
+						vec4( 0, 0, 0, 1)];*/
 
     var indexList = [
 					0, 1, 3,
@@ -398,6 +519,7 @@ function drawChair() {
                      0+40, 3+40, 4+40,
                      2+40, 1+40, 6+40,
                      2+40, 6+40, 7+40];
+	
     
 	var iBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBuffer);
@@ -411,23 +533,38 @@ function drawChair() {
 	gl.vertexAttribPointer(myPosition, 4, gl.FLOAT, false, 0, 0);
 	gl.enableVertexAttribArray(myPosition);
 	
-	var colorBuffer = gl.createBuffer();
+	/* var colorBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, flatten(vertexColors), gl.STATIC_DRAW);
 	
 	var myColor = gl.getAttribLocation(myShaderProgram, "myColor");
 	gl.vertexAttribPointer(myColor, 4, gl.FLOAT, false, 0, 0);
-	gl.enableVertexAttribArray(myColor);
+	gl.enableVertexAttribArray(myColor); */
 	
+	var textureBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, flatten(textureCoordinates), gl.STATIC_DRAW);
+
+	var texturePosition = gl.getAttribLocation(myShaderProgram, "textureCoordinate");
+	gl.vertexAttribPointer(texturePosition, 2, gl.FLOAT, false, 0, 0);
+	gl.enableVertexAttribArray(texturePosition);
+
+	textureImage = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, textureImage);
+	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, chairImage);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+
 	gl.drawElements(gl.TRIANGLES, 216, gl.UNSIGNED_BYTE, 0);
-	
+
 	transX = 0;
-    transXLoc = gl.getUniformLocation(myShaderProgram, "transX");
-    gl.uniform1f(transXLoc, transX);
-	
+	transXLoc = gl.getUniformLocation(myShaderProgram, "transX");
+	gl.uniform1f(transXLoc, transX);
+
 	transY = 0;
-    transYLoc = gl.getUniformLocation(myShaderProgram, "transY");
-    gl.uniform1f(transYLoc, transY);
+	transYLoc = gl.getUniformLocation(myShaderProgram, "transY");
+	gl.uniform1f(transYLoc, transY);
 }
 
 function drawLaptop() {
@@ -449,7 +586,7 @@ function drawLaptop() {
                     vec4( -.05, -.05+.06,  .01+.04), 
                     vec4(  .05, -.05+.06,  .01+.04)];
 					
-    var vertexColors = [
+    /* var vertexColors = [
 						vec4( 0, 0, 0, 1),
 						vec4( 0, 0, 0, 1),
 						vec4( 0, 0, 0, 1),
@@ -467,8 +604,26 @@ function drawLaptop() {
 						vec4( 0, 0, 0, 1),
 						vec4( 0, 0, 0, 1),
 						vec4( 0, 0, 0, 1)
-						];
-						
+						]; */
+	
+	var textureCoordinates = [vec2(0.0, 0.0),//bottom
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  
+							  vec2(0.0, 0.0),//top
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0),
+							  vec2(0.0, 0.0),
+							  vec2(0.0, 1.0),
+							  vec2(1.0, 0.0),
+							  vec2(1.0, 1.0)];
+	
     var indexList = [
 					0, 1, 3,
                      1, 2, 3,
@@ -508,13 +663,29 @@ function drawLaptop() {
 	gl.vertexAttribPointer(myPosition, 4, gl.FLOAT, false, 0, 0);
 	gl.enableVertexAttribArray(myPosition);
 	
-	var colorBuffer = gl.createBuffer();
+	/* var colorBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, flatten(vertexColors), gl.STATIC_DRAW);
 	
 	var myColor = gl.getAttribLocation(myShaderProgram, "myColor");
 	gl.vertexAttribPointer(myColor, 4, gl.FLOAT, false, 0, 0);
-	gl.enableVertexAttribArray(myColor);
+	gl.enableVertexAttribArray(myColor); */
+	
+	var textureBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, flatten(textureCoordinates), gl.STATIC_DRAW);
+
+	var texturePosition = gl.getAttribLocation(myShaderProgram, "textureCoordinate");
+	gl.vertexAttribPointer(texturePosition, 2, gl.FLOAT, false, 0, 0);
+	gl.enableVertexAttribArray(texturePosition);
+
+	textureImage = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, textureImage);
+	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, laptopImage);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+	
 	
 	gl.drawElements(gl.TRIANGLES, 72, gl.UNSIGNED_BYTE, 0);
 }
