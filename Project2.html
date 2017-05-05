@@ -1,4 +1,20 @@
 <!DOCTYPE html>
+<style>
+body{
+	background-color:rgb(128,128,128);
+}
+button,input{
+	width:200px;
+	color: white;
+	background-color: black;
+}
+h4{
+	color:red;
+}
+
+</style>
+
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
@@ -12,6 +28,8 @@
 			uniform float transY;
 			uniform float alpha;
 			uniform float beta;
+			uniform float cAlpha;
+			uniform float cBeta;
 			mat4 M_x; mat4 M_y;
 			mat4 M_tx; mat4 M_ty;
 			
@@ -66,14 +84,21 @@
     </head>
     
     <body onload = "init()">
-        <canvas id="gl-canvas" width="512" height="512"></canvas><br/>
+        <center>
+		<canvas id="gl-canvas" width="512" height="512"></canvas><br/>
 		<img id="chairPicture" hidden src="chair.png"/>
 		<img id="deskPicture" hidden src="desk.jpg"/>
 		<img id="laptopPicture" hidden src="laptop.jpg"/>
         <button id="rotateX" onclick="rotateAroundX()">Rotate Around X</button>
         <button id="rotateY" onclick="rotateAroundY()">Rotate Around Y</button>
-		<button id="ChairX" onclick="chaircAroundX()">Rotate Chair Around X</button>
-		<button id="chairY" onclick="chairAroundY()">Rotate Chair Around Y</button>
+		<br/>
+		<button id="chairX" onclick="transX()">Translate Chair X</button>
+		<button id="chairY" onclick="transY()">Translate Chair Y</button>
+		<br/>
+		<input type="button" id="1" value="Light 1: On" onclick="toggle1(this);">
+		<input type="button" id="2" value="Light 2: On" onclick="toggle2(this);">
+		<h4>By: Michael Farden and Matthew Strenk
+		</center>
     </body>
 </html>
 

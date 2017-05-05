@@ -712,3 +712,32 @@ function rotateAroundY() {
 	gl.uniform1f(beta_uniform, beta);
 }
 
+function transX(){
+  transX += .1;
+  transXLoc = gl.getUniformLocation(myShaderProgram, "transX");
+  gl.uniform1f(transXLoc, transX);
+}//end function transX
+
+function transY(){
+  transY += .1;
+  transYLoc = gl.getUniformLocation(myShaderProgram, "transY");
+  gl.uniform1f(transYLoc, transY);
+}//end function transY
+
+function toggle1(){
+	if (document.getElementById("1").value=="Light 1: On"){
+		document.getElementById("1").value="Light 1: Off";
+	}
+	else{
+		document.getElementById("1").value="Light 1: On";
+	}
+}//end function toggle1
+
+function toggle2(){
+	if (document.getElementById("2").value=="Light 2: On"){
+		document.getElementById("2").value="Light 2: Off";
+	}
+	else{
+		document.getElementById("2").value="Light 2: On";
+	}
+}//end function toggle1
