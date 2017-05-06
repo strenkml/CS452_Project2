@@ -24,82 +24,24 @@ h4{
 			attribute vec4 myPosition;
 			attribute vec4 myColor;
 			varying vec4 varyingColor;
-			uniform float transX;
-			uniform float transY;
 			uniform float alpha;
 			uniform float beta;
-			uniform float cAlpha;
-			uniform float cBeta;
 			mat4 M_x; mat4 M_y;
-			mat4 M_tx; mat4 M_ty;
 			
 			attribute vec2 textureCoordinate;
 			varying vec2 fTextureCoordinate;
-			
+	
+			uniform mat4 M, P_persp;
+
 			void main() {
 				fTextureCoordinate = textureCoordinate;
-				
-				M_x = mat4(1, 0, 0, 0, 0, cos(alpha), -sin(alpha), 0,
-							0, sin(alpha), cos(alpha), 0, 0, 0, 0, 1);
-				
-				M_y = mat4(cos(beta), 0, -sin(beta), 0, 0, 1, 0, 0,
-							sin(beta), 0, cos(beta), 0, 0, 0, 0, 1);
-				M_tx = mat4
-                (1, 0, 0, 0,
-                 0, 1, 0, 0,
-                 0, 0, 1, 0,
-                 transX, 0, 0, 1);
-				 
-                M_ty = mat4
-                (1, 0, 0, 0,
-                 0, 1, 0, 0,
-                 0, 0, 1, 0,
-                 0, transY, 0, 1);	
-				 
+
 				gl_PointSize = 1.0;
-				gl_Position = M_tx * M_ty * M_x * M_y * myPosition;
-			}	
-            </script>
-			
-			<script id="vertex-shader2" type="x-shader/x-vertex">
-			attribute vec4 myPosition;
-			attribute vec4 myColor;
-			varying vec4 varyingColor;
-			uniform float transX;
-			uniform float transY;
-			uniform float alpha;
-			uniform float beta;
-			uniform float cAlpha;
-			uniform float cBeta;
-			mat4 M_x; mat4 M_y;
-			mat4 M_tx; mat4 M_ty;
-			
-			attribute vec2 textureCoordinate;
-			varying vec2 fTextureCoordinate;
-			
-			void main() {
-				fTextureCoordinate = textureCoordinate;
 				
-				M_x = mat4(1, 0, 0, 0, 0, cos(alpha), -sin(alpha), 0,
-							0, sin(alpha), cos(alpha), 0, 0, 0, 0, 1);
+				vec4 vertexPositionTransformed = M * myPosition;
 				
-				M_y = mat4(cos(beta), 0, -sin(beta), 0, 0, 1, 0, 0,
-							sin(beta), 0, cos(beta), 0, 0, 0, 0, 1);
-				M_tx = mat4
-                (1, 0, 0, 0,
-                 0, 1, 0, 0,
-                 0, 0, 1, 0,
-                 transX, 0, 0, 1);
-				 
-                M_ty = mat4
-                (1, 0, 0, 0,
-                 0, 1, 0, 0,
-                 0, 0, 1, 0,
-                 0, transY, 0, 1);	
-				 
-				gl_PointSize = 1.0;
-				gl_Position = M_tx * M_ty * M_x * M_y * myPosition;
-			}	
+				gl_Position = P_persp * vertexPositionTransformed;
+			}
             </script>
             
             <script id="fragment-shader" type="x-shader/x-fragment">
@@ -121,10 +63,6 @@ h4{
             <script type="text/javascript" src="Common/MV.js"></script>
         
             <script type="text/javascript" src="project2.js"></script>
-			
-			<script type="text/javascript" src="chairObject.js"></script>
-			<script type="text/javascript" src="deskObject.js"></script>
-			<script type="text/javascript" src="laptopObject.js"></script>
             
     </head>
     
