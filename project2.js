@@ -1,5 +1,6 @@
 var gl;
 var myShaderProgram;
+var myShaderProgram2;
 var Mvector;
 var alpha, beta;
 var transY, transX;
@@ -25,6 +26,9 @@ function init() {
     
     myShaderProgram = initShaders( gl,"vertex-shader", "fragment-shader" );
 	gl.useProgram(myShaderProgram);
+	
+	myShaderProgram2 = initShaders( gl,"vertex-shader2", "fragment-shader" );
+	gl.useProgram(myShaderProgram2);
 	
 	var alpha_uniform = gl.getUniformLocation(myShaderProgram, "alpha");
 	gl.uniform1f(alpha_uniform, alpha);
@@ -529,7 +533,7 @@ function drawChair() {
 	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW);
 	
-	var myPosition = gl.getAttribLocation(myShaderProgram, "myPosition");
+	var myPosition = gl.getAttribLocation(myShaderProgram2, "myPosition");
 	gl.vertexAttribPointer(myPosition, 4, gl.FLOAT, false, 0, 0);
 	gl.enableVertexAttribArray(myPosition);
 	
@@ -545,7 +549,7 @@ function drawChair() {
 	gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, flatten(textureCoordinates), gl.STATIC_DRAW);
 
-	var texturePosition = gl.getAttribLocation(myShaderProgram, "textureCoordinate");
+	var texturePosition = gl.getAttribLocation(myShaderProgram2, "textureCoordinate");
 	gl.vertexAttribPointer(texturePosition, 2, gl.FLOAT, false, 0, 0);
 	gl.enableVertexAttribArray(texturePosition);
 
@@ -559,12 +563,12 @@ function drawChair() {
 	gl.drawElements(gl.TRIANGLES, 216, gl.UNSIGNED_BYTE, 0);
 
 	transX = 0;
-	transXLoc = gl.getUniformLocation(myShaderProgram, "transX");
-	gl.uniform1f(transXLoc, transX);
+	//transXLoc = gl.getUniformLocation(myShaderProgram, "transX");
+	//gl.uniform1f(transXLoc, transX);
 
 	transY = 0;
-	transYLoc = gl.getUniformLocation(myShaderProgram, "transY");
-	gl.uniform1f(transYLoc, transY);
+	//transYLoc = gl.getUniformLocation(myShaderProgram, "transY");
+	//gl.uniform1f(transYLoc, transY);
 }
 
 function drawLaptop() {
@@ -712,32 +716,14 @@ function rotateAroundY() {
 	gl.uniform1f(beta_uniform, beta);
 }
 
-function transX(){
+function transF(){
   transX += .1;
-  transXLoc = gl.getUniformLocation(myShaderProgram, "transX");
+  transXLoc = gl.getUniformLocation(myShaderProgram2, "transX");
   gl.uniform1f(transXLoc, transX);
 }//end function transX
 
-function transY(){
-  transY += .1;
-  transYLoc = gl.getUniformLocation(myShaderProgram, "transY");
-  gl.uniform1f(transYLoc, transY);
-}//end function transY
-
-function toggle1(){
-	if (document.getElementById("1").value=="Light 1: On"){
-		document.getElementById("1").value="Light 1: Off";
-	}
-	else{
-		document.getElementById("1").value="Light 1: On";
-	}
-}//end function toggle1
-
-function toggle2(){
-	if (document.getElementById("2").value=="Light 2: On"){
-		document.getElementById("2").value="Light 2: Off";
-	}
-	else{
-		document.getElementById("2").value="Light 2: On";
-	}
-}//end function toggle1
+function transB(){
+  transX -= .1;
+  transXLoc = gl.getUniformLocation(myShaderProgram2, "transX");
+  gl.uniform1f(transXLoc, transX);
+}//end function transX
